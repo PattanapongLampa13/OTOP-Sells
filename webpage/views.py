@@ -1,16 +1,23 @@
 from django.shortcuts import render
+from django.contrib.auth import logout as auth_logout
+from django.shortcuts import redirect
 
-def base(request):
-    return render(request, 'base.html')
-
-def home(request):
+# หน้าหลัก
+def home_view(request):
     return render(request, 'home.html')
 
-def sels(request):
+# หน้ารายการสินค้าทั้งหมด
+def sels_view(request):
     return render(request, 'sels.html')
 
-def map(request):
+# หน้าแผนที่
+def map_view(request):
     return render(request, 'map.html')
 
+# หน้าเข้าสู่ระบบ
+def login_view(request):
+    return render(request, 'login/login.html')
 
-# Create your views here.
+# หน้าสมัครสมาชิก
+def register_view(request):
+    return render(request, 'login/register.html')

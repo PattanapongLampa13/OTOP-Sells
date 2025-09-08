@@ -1,1 +1,71 @@
 {% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">สินค้าทั้งหมด</h1>
+
+    <!-- Filters and Sorting -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <!-- Category Filter -->
+            <div class="btn-group" role="group" aria-label="Category filter">
+                <button type="button" class="btn btn-outline-secondary active">ทุกหมวดหมู่</button>
+                <button type="button" class="btn btn-outline-secondary">อาหารและเครื่องดื่ม</button>
+                <button type="button" class="btn btn-outline-secondary">ของใช้และของตกแต่ง</button>
+                <button type="button" class="btn btn-outline-secondary">เสื้อผ้าและเครื่องแต่งกาย</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Sorting Dropdown -->
+            <div class="input-group">
+                <label class="input-group-text" for="sort-options">จัดเรียงตาม:</label>
+                <select class="form-select" id="sort-options">
+                    <option selected>แนะนำ</option>
+                    <option value="1">ราคา: น้อยไปมาก</option>
+                    <option value="2">ราคา: มากไปน้อย</option>
+                    <option value="3">ชื่อ: ก-ฮ</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for i in "12345678" %} <!-- Loop สำหรับแสดงตัวอย่างสินค้า 8 ชิ้น -->
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="https://via.placeholder.com/300x200?text=Product+{{ forloop.counter }}" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title">ชื่อสินค้า {{ forloop.counter }}</h5>
+                    <p class="card-text">คำอธิบายสั้นๆ ของสินค้าชิ้นนี้</p>
+                    <h6 class="card-subtitle mb-2 text-success fw-bold">฿999</h6>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-outline-primary">ดูรายละเอียด</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">ก่อนหน้า</a>
+            </li>
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">ถัดไป</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+{% endblock %}
