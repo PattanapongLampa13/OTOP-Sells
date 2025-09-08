@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src="https://via.placeholder.com/150" alt="OTOP Logo" width="150">
+    <h1 class="display-5 fw-bold">ยินดีต้อนรับสู่ OTOP สินค้าชุมชน</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">ค้นพบและสนับสนุนผลิตภัณฑ์คุณภาพจากภูมิปัญญาท้องถิ่นทั่วประเทศไทย ที่คัดสรรมาเพื่อคุณโดยเฉพาะ</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-success btn-lg px-4 gap-3">ดูสินค้าทั้งหมด</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4">เกี่ยวกับเรา</button>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+<div class="container px-4 py-5" id="featured-products">
+    <h2 class="pb-2 border-bottom">สินค้าแนะนำ</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 py-5">
+        <!-- Product Card 1 -->
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 1">
+                <div class="card-body">
+                    <h5 class="card-title">ชื่อสินค้า 1</h5>
+                    <p class="card-text">คำอธิบายสั้นๆ เกี่ยวกับสินค้านี้ เพื่อดึงดูดความสนใจ</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-primary">ดูรายละเอียด</a>
+                </div>
+            </div>
+        </div>
+        <!-- Product Card 2 -->
+        <div class="col">
+            <div class="card h-100">
+                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product 2">
+                <div class="card-body">
+                    <h5 class="card-title">ชื่อสินค้า 2</h5>
+                    <p class="card-text">คำอธิบายสั้นๆ เกี่ยวกับสินค้านี้ เพื่อดึงดูดความสนใจ</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-primary">ดูรายละเอียด</a>
+                </div>
+            </div>
+        </div>
+        <!-- เพิ่มการ์ดสินค้าอื่นๆ ที่นี่ -->
+    </div>
+</div>
+
+{% endblock %}
