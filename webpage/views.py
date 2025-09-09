@@ -13,12 +13,10 @@ def load_otop_data():
     """
     products = []
     json_file_path = os.path.join(settings.BASE_DIR, 'otop.json')
-
     try:
         with open(json_file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             raw_products = data.get('Sheet1', [])
-            
             for p in raw_products:
                 products.append({
                     'name': p.get('ชื่อสินค้า OTOP'),
@@ -31,12 +29,10 @@ def load_otop_data():
                     'lat': p.get('LAT'),
                     'long': p.get('LONG'),
                 })
-
     except FileNotFoundError:
         print(f"Error: The file {json_file_path} was not found.")
     except json.JSONDecodeError:
         print(f"Error: Could not decode JSON from the file {json_file_path}.")
-        
     return products
 
 
@@ -53,7 +49,19 @@ def home_view(request):
 # หน้ารายการสินค้าทั้งหมด
 def sels_view(request):
     products = load_otop_data()
-    return render(request, 'sels.html', {'products': products})
+    # Get unique provinces for dropdown
+    provinces = sorted(set([p['province'] for p in products if p['province']]))
+    selected_province = request.GET.get('province')
+    if selected_province:
+        # Only show products with map info
+        products = [p for p in products if p['province'] == selected_province and p['lat'] is not None and p['long'] is not None]
+    else:
+        products = None  # Show modal, but don't break template
+    return render(request, 'sels.html', {
+        'products': products,
+        'provinces': provinces,
+        'selected_province': selected_province,
+    })
 
 # หน้าเข้าสู่ระบบ
 def login_view(request):

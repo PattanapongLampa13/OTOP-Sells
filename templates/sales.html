@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<!-- Province Selection Modal (Required) -->
+<div class="modal fade" id="provinceModal" tabindex="-1" aria-labelledby="provinceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="provinceModalLabel">กรุณาเลือกจังหวัดของคุณ</h5>
+            </div>
+            <div class="modal-body">
+                <form id="provinceForm" method="get" action="">
+                    <div class="mb-3">
+                        <label for="province-select" class="form-label fw-bold">เลือกจังหวัด:</label>
+                        <select id="province-select" name="province" class="form-select" required>
+                            <option value="" disabled selected>-- กรุณาเลือกจังหวัด --</option>
+                            {% for province in provinces %}
+                                <option value="{{ province }}">{{ province }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="provinceForm" class="btn btn-success">ยืนยัน</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+        <h1 class="my-4">สินค้าทั้งหมด</h1>
+
+                {% if selected_province %}
+                        {% comment %}Sort products: those with map info first{% endcomment %}
+                        {% with products|dictsortreversed:"lat" as sorted_products %}
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                                {% for product in sorted_products %}
+                                        <div class="col">
+                                                <div class="card h-100 shadow-sm">
+                                                        <img src="{% if product.image_url %}{{ product.image_url }}{% else %}https://via.placeholder.com/300x200?text={{ product.name|urlencode }}{% endif %}" class="card-img-top" alt="{{ product.name }}">
+                                                        <div class="card-body">
+                                                                <h5 class="card-title">{{ product.name }}</h5>
+                                                                <p class="card-text text-muted">{{ product.description|truncatewords:10 }}</p>
+                                                                <h6 class="card-subtitle mb-2 text-success fw-bold">{% if product.price %}฿{{ product.price }}{% else %}ไม่ระบุราคา{% endif %}</h6>
+                                                        </div>
+                                                        <div class="card-footer bg-transparent border-top-0">
+                                                                <div class="d-grid">
+                                                                        {% if product.lat and product.long %}
+                                                                                <a href="{% url 'map' %}?name={{ product.name|urlencode }}&lat={{ product.lat }}&long={{ product.long }}" class="btn btn-outline-danger">ดูแผนที่</a>
+                                                                        {% else %}
+                                                                                <button class="btn btn-outline-secondary" disabled>ไม่มีข้อมูลแผนที่</button>
+                                                                        {% endif %}
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                {% empty %}
+                                        <p class="text-center">ไม่พบสินค้าในจังหวัดนี้</p>
+                                {% endfor %}
+                        </div>
+                        {% endwith %}
+                {% endif %}
+
+        <!-- Pagination (optional, only if province selected) -->
+        {% if selected_province %}
+        <nav aria-label="Page navigation" class="mt-5">
+                <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">ก่อนหน้า</a>
+                        </li>
+                        <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                                <a class="page-link" href="#">ถัดไป</a>
+                        </li>
+                </ul>
+        </nav>
+        {% endif %}
+</div>
+
+{% block scripts %}
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+                var selectedProvince = "{{ selected_province|default:'' }}";
+                if (!selectedProvince) {
+                        var provinceModal = new bootstrap.Modal(document.getElementById('provinceModal'), {
+                                backdrop: 'static',
+                                keyboard: false
+                        });
+                        provinceModal.show();
+                }
+        });
+</script>
+{% endblock %}
+{% endblock %}
