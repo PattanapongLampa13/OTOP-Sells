@@ -1,26 +1,20 @@
 {
-    "version": 2,
     "builds": [
         {
-            "src": "vercel_deploy/wsgi.py",
-            "use": "@vercel/python"
+            "src": "OTOPsels/wsgi.py",
+            "use": "@vercel/python",
+            "config": { "maxLambdaSize": "15mb", "runtime": "python3.12" }
         },
         {
-            "src": "build_files.sh",
+            "src": "build.sh",
             "use": "@vercel/static-build",
             "config": {
-                "distDir": "staticfiles_build"
+                "distDir": "staticfiles"
             }
         }
     ],
     "routes": [
-        {
-            "src": "/static/(.*)",
-            "dest": "/static/$1"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "vercel_deploy/wsgi.py"
-        }
+        { "src": "/static/(.*)", "dest": "/static/$1" },
+        { "src": "/(.*)", "dest": "OTOPsels/wsgi.py" }
     ]
 }
