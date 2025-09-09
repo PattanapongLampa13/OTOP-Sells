@@ -10,11 +10,15 @@ from django.core.serializers import serialize
 
 # หน้าหลัก
 def home_view(request):
-    return render(request, 'home.html')
+    # แสดงสินค้าแนะนำ 6 ชิ้นแรก
+    featured_products = OtopProduct.objects.all()[:6]
+    context = {'featured_products': featured_products}
+    return render(request, 'home.html', context)
 
 # หน้ารายการสินค้าทั้งหมด
 def sels_view(request):
-    return render(request, 'sels.html')
+    products = OtopProduct.objects.all()
+    return render(request, 'sels.html', {'products': products})
 
 # หน้าเข้าสู่ระบบ
 def login_view(request):
@@ -28,11 +32,11 @@ def register_view(request):
 # หน้าแผนที่
 def map_view(request):
     # ดึงข้อมูลสินค้า OTOP ทั้งหมด
-    products = OtopProduct.objects.all()
+    otop_locations = OtopProduct.objects.filter(latitude__isnull=False, longitude__isnull=False)
     
     # แปลงข้อมูล QuerySet เป็น GeoJSON format ที่ใช้ง่ายใน JavaScript
     # หรือจะแปลงเป็น JSON ธรรมดาก็ได้
-    products_json = serialize('json', products, fields=('name', 'latitude', 'longitude'))
+    locations_json = serialize('json', otop_locations, fields=('name', 'latitude', 'longitude', 'location_name'))
 
     # ดึง API Key จาก settings.py (วิธีที่ปลอดภัยกว่า)
     # อย่าลืมไปเพิ่ม GOOGLE_MAPS_API_KEY = "your_key" ในไฟล์ settings.py
@@ -40,7 +44,7 @@ def map_view(request):
     api_key = settings.GOOGLE_MAPS_API_KEY
 
     context = {
-        'products_json': products_json,
+        'locations_json': locations_json,
         'api_key': api_key,
     }
     return render(request, 'webpage/map_template.html', context)

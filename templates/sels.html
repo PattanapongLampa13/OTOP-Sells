@@ -31,14 +31,14 @@
 
     <!-- Product Grid -->
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-        {% for i in "12345678" %} <!-- Loop สำหรับแสดงตัวอย่างสินค้า 8 ชิ้น -->
+        {% for product in products %}
         <div class="col">
             <div class="card h-100 shadow-sm">
-                <img src="https://via.placeholder.com/300x200?text=Product+{{ forloop.counter }}" class="card-img-top" alt="Product Image">
+                <img src="{% if product.image_url %}{{ product.image_url }}{% else %}https://via.placeholder.com/300x200?text={{ product.name|urlencode }}{% endif %}" class="card-img-top" alt="{{ product.name }}">
                 <div class="card-body">
-                    <h5 class="card-title">ชื่อสินค้า {{ forloop.counter }}</h5>
-                    <p class="card-text">คำอธิบายสั้นๆ ของสินค้าชิ้นนี้</p>
-                    <h6 class="card-subtitle mb-2 text-success fw-bold">฿999</h6>
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted">{{ product.description|truncatewords:10 }}</p>
+                    <h6 class="card-subtitle mb-2 text-success fw-bold">{% if product.price %}฿{{ product.price }}{% else %}ไม่ระบุราคา{% endif %}</h6>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
                     <div class="d-grid">
@@ -47,6 +47,8 @@
                 </div>
             </div>
         </div>
+        {% empty %}
+            <p class="text-center">ไม่พบสินค้า</p>
         {% endfor %}
     </div>
 
