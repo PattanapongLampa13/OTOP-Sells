@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src="https://via.placeholder.com/150" alt="OTOP Logo" width="150">
+    <h1 class="display-5 fw-bold">ยินดีต้อนรับสู่ OTOP สินค้าชุมชน</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">ค้นพบและสนับสนุนผลิตภัณฑ์คุณภาพจากภูมิปัญญาท้องถิ่นทั่วประเทศไทย ที่คัดสรรมาเพื่อคุณโดยเฉพาะ</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <button type="button" class="btn btn-success btn-lg px-4 gap-3">ดูสินค้าทั้งหมด</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4">เกี่ยวกับเรา</button>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+<div class="container px-4 py-5" id="featured-products">
+    <h2 class="pb-2 border-bottom">สินค้าแนะนำ</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 py-5">
+        {% for product in featured_products %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{% if product.image_url %}{{ product.image_url }}{% else %}https://via.placeholder.com/300x200?text={{ product.name|urlencode }}{% endif %}" class="card-img-top" alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">{{ product.description|truncatewords:15 }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="#" class="btn btn-outline-primary w-100">ดูรายละเอียด</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">ยังไม่มีสินค้าแนะนำ</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
