@@ -35,6 +35,9 @@ ALLOWED_HOSTS = [
     # เพิ่ม Custom Domain ของคุณถ้ามี
 ]
 
+if vercel_url := os.environ.get('VERCEL_URL'):
+    ALLOWED_HOSTS.append(vercel_url)
+
 CSRF_TRUSTED_ORIGINS = [
     'https://*.vercel.app',
     # เพิ่ม Custom Domain ของคุณถ้ามี เช่น 'https://yourdomain.com'
@@ -104,7 +107,6 @@ else:
         }
     }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -143,7 +145,7 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-STATIC_ROOT = BASE_DIR / "staticfiles_build"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
