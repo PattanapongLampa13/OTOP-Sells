@@ -66,14 +66,11 @@ def register_view(request):
 
 # หน้าแผนที่
 def map_view(request):
+        # รับ query params สำหรับ lat, long, name
     all_products = load_otop_data()
-    
-    # กรองข้อมูลเฉพาะที่มีพิกัด Latitude และ Longitude
     otop_locations = [
         p for p in all_products if p.get('lat') is not None and p.get('long') is not None
     ]
-    
-    # เตรียมข้อมูลสำหรับส่งไปให้ JavaScript บนแผนที่
     locations_data = [
         {
             "name": loc.get("name"),
@@ -82,13 +79,12 @@ def map_view(request):
             "location_name": loc.get("sale_location_name")
         } for loc in otop_locations
     ]
-    # แปลง Python list of dicts เป็น JSON string
     locations_json = json.dumps(locations_data, ensure_ascii=False)
 
-    api_key = settings.GOOGLE_MAPS_API_KEY
+    api_key = getattr(settings, 'GOOGLE_MAPS_API_KEY', None)
 
     context = {
         'locations_json': locations_json,
         'api_key': api_key,
     }
-    return render(request, 'webpage/map_template.html', context)
+    return render(request, 'map.html', context)

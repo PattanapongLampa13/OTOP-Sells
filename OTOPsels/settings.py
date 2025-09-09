@@ -176,4 +176,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ดึงค่า API Key จาก Environment Variable
 # วิธีนี้ปลอดภัยกว่าการเขียน Key ลงไปในโค้ดโดยตรง
-GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
+# For local development, use your key directly. For production, use the environment variable.
+GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "AIzaSyATRuubv3L9TEtdgtTk0tAziudpHnTiQys")
+# For local development, you can create a .env file or set the environment variable manually.
+# Do NOT hardcode your API key here if you plan to push to GitHub.
+# Example for local use (not pushed):
+# GOOGLE_MAPS_API_KEY = "YOUR_LOCAL_API_KEY_HERE"

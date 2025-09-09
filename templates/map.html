@@ -1,1 +1,63 @@
 {% extends "base.html" %}
+{% block content %}
+<div class="container">
+	<h2 class="mb-4 text-center">ตำแหน่งร้าน OTOP</h2>
+	<div id="map" style="height: 600px; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.1);"></div>
+	<div class="mt-4 text-center">
+		<a href="{% url 'sels' %}" class="btn btn-success">กลับไปหน้าสินค้า</a>
+	</div>
+</div>
+
+<script>
+	function getQueryParam(param) {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(param);
+	}
+
+	const lat = parseFloat(getQueryParam('lat'));
+	const lng = parseFloat(getQueryParam('long'));
+	const name = decodeURIComponent(getQueryParam('name') || '');
+
+	function initMap() {
+		let mapCenter = { lat: 13.7563, lng: 100.5018 };
+		let mapZoom = 6;
+		let marker = null;
+
+		if (!isNaN(lat) && !isNaN(lng)) {
+			mapCenter = { lat: lat, lng: lng };
+			mapZoom = 15;
+		}
+
+		const map = new google.maps.Map(document.getElementById('map'), {
+			zoom: mapZoom,
+			center: mapCenter,
+			mapTypeId: 'roadmap'
+		});
+
+		// Only show marker if lat/lng are provided
+		if (!isNaN(lat) && !isNaN(lng)) {
+			marker = new google.maps.Marker({
+				position: { lat: lat, lng: lng },
+				map: map,
+				title: name,
+				icon: {
+					url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+					scaledSize: new google.maps.Size(40, 40)
+				},
+				animation: google.maps.Animation.DROP
+			});
+			const infoWindow = new google.maps.InfoWindow({
+				content: `<div style='font-size:1.1em;'><b>${name}</b></div>`
+			});
+			marker.addListener('click', function() {
+				infoWindow.open(map, marker);
+			});
+			setTimeout(() => {
+				marker.setAnimation(google.maps.Animation.BOUNCE);
+				setTimeout(() => marker.setAnimation(null), 1400);
+			}, 800);
+		}
+	}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"></script>
+{% endblock %}

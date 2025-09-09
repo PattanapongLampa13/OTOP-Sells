@@ -42,7 +42,11 @@
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
                     <div class="d-grid">
-                        <a href="#" class="btn btn-outline-primary">ดูรายละเอียด</a>
+                        {% if product.lat and product.long %}
+                        <a href="{% url 'map' %}?name={{ product.name|urlencode }}&lat={{ product.lat }}&long={{ product.long }}" class="btn btn-outline-danger">ดูแผนที่</a>
+                        {% else %}
+                        <button class="btn btn-outline-secondary" disabled>ไม่มีข้อมูลแผนที่</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
