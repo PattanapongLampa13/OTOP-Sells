@@ -6,7 +6,28 @@ from .models import OtopProduct
 import json
 from django.core.serializers import serialize
 
+from pathlib import Path
+import os
+
+
+
+
 # Create your views here.
+
+# BASE_DIR ของ Django
+BASE_DIR = Path(__file__).resolve().parent.parent  # ปรับให้ตรงกับ settings.py
+
+# path ไปยัง otop.json
+json_path = BASE_DIR / "otop.json"
+
+# โหลดข้อมูล
+with open(json_path, "r", encoding="utf-8") as f:
+    otop_data = json.load(f)
+
+
+
+
+
 
 # หน้าหลัก
 def home_view(request):
