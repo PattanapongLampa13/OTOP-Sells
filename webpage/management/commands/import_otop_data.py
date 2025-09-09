@@ -1,5 +1,6 @@
 import json
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from webpage.models import OtopProduct
 
 class Command(BaseCommand):
@@ -12,7 +13,7 @@ class Command(BaseCommand):
             OtopProduct.objects.all().delete()
 
         # ระบุ path ไปยังไฟล์ otop.json ของคุณ
-        json_file_path = 'otop.json' 
+        json_file_path = settings.BASE_DIR / 'otop.json' 
 
         try:
             with open(json_file_path, 'r', encoding='utf-8') as f:

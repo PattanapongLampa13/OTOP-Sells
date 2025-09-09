@@ -35,6 +35,12 @@ ALLOWED_HOSTS = [
     # เพิ่ม Custom Domain ของคุณถ้ามี
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+    # เพิ่ม Custom Domain ของคุณถ้ามี เช่น 'https://yourdomain.com'
+]
+
+
 # Application definition
 
 INSTALLED_APPS = [
