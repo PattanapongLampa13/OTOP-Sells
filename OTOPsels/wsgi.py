@@ -15,5 +15,5 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OTOPsels.settings')
 
 application = get_wsgi_application()
 
-# เพิ่มบรรทัดนี้เข้าไปเพื่อให้ Vercel หาเจอ
+
 app = application
