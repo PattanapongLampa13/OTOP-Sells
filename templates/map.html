@@ -42,16 +42,36 @@
 				title: name,
 				icon: {
 					url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-					scaledSize: new google.maps.Size(40, 40)
+					scaledSize: new google.maps.Size(48, 48)
 				},
 				animation: google.maps.Animation.DROP
 			});
+			// Stylish info window with Google Maps button
 			const infoWindow = new google.maps.InfoWindow({
-				content: `<div style='font-size:1.1em;'><b>${name}</b></div>`
+				content: `
+					<div style="font-size:1.1em; text-align:center; padding:10px;">
+						<b style="font-size:1.2em; color:#d32f2f;">${name}</b><br>
+						<a href='https://www.google.com/maps/search/?api=1&query=${lat},${lng}' target='_blank' class='btn btn-danger mt-2' style="margin-top:10px; font-weight:bold; box-shadow:0 2px 8px rgba(211,47,47,0.2); transition:0.2s;">ดูบน Google Maps 🚀</a>
+					</div>
+				`
 			});
 			marker.addListener('click', function() {
 				infoWindow.open(map, marker);
+				// Animate marker with bounce and glow
+				marker.setAnimation(google.maps.Animation.BOUNCE);
+				marker.setIcon({
+					url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+					scaledSize: new google.maps.Size(56, 56)
+				});
+				setTimeout(() => {
+					marker.setAnimation(null);
+					marker.setIcon({
+						url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+						scaledSize: new google.maps.Size(48, 48)
+					});
+				}, 1600);
 			});
+			// Initial cool drop and bounce
 			setTimeout(() => {
 				marker.setAnimation(google.maps.Animation.BOUNCE);
 				setTimeout(() => marker.setAnimation(null), 1400);
