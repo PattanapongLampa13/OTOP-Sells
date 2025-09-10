@@ -1,7 +1,7 @@
-{% comment %} {% extends "base.html" %}
+{% extends "base.html" %}
 
-{% block content %} {% endcomment %}
-{% comment %} 
+{% block content %}
+
 
 <!-- Province Selection Modal (Required) -->
 <div class="modal fade" id="provinceModal" tabindex="-1" aria-labelledby="provinceModalLabel" aria-hidden="true">
@@ -54,7 +54,7 @@
 
         {% if selected_province %}
                 {% comment %}Sort products: those with map info first{% endcomment %}
-                {% comment %} {% with products|dictsortreversed:"lat" as sorted_products %}
+                {% with products|dictsortreversed:"lat" as sorted_products %}
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                         {% for product in sorted_products %}
                                 <div class="col">
@@ -147,6 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
 });
-</script> {% endcomment %}
-{% comment %} {% endblock %}
-{% endblock %} {% endcomment %}
+</script>
+{% endblock %}
+{% endblock %}

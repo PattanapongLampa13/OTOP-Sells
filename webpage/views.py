@@ -89,7 +89,9 @@ def map_view(request):
     ]
     locations_json = json.dumps(locations_data, ensure_ascii=False)
 
-    api_key = getattr(settings, 'GOOGLE_MAPS_API_KEY', None)
+    api_key = settings.GOOGLE_MAPS_API_KEY
+    if not api_key:
+        raise ValueError("Google Maps API key is not configured in settings")
 
     context = {
         'locations_json': locations_json,
