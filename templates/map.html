@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <div class="container">
 	<h2 class="mb-4 text-center">ตำแหน่งร้าน OTOP</h2>
@@ -7,6 +8,7 @@
 		<a href="{% url 'sels' %}" class="btn btn-success">กลับไปหน้าสินค้า</a>
 	</div>
 </div>
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
 <script>
 	function getQueryParam(param) {
