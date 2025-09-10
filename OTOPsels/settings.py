@@ -16,6 +16,7 @@ import dj_database_url
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,13 +35,13 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS = [
-#     'localhost',
-#     '127.0.0.1',
-#     '.vercel.app',
-#     # เพิ่ม Custom Domain ของคุณถ้ามี
-# ]
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '.vercel.app',
+    # เพิ่ม Custom Domain ของคุณถ้ามี
+]
+# ALLOWED_HOSTS = ["*"]
 
 if vercel_url := os.environ.get('VERCEL_URL'):
     ALLOWED_HOSTS.append(vercel_url)
@@ -127,11 +128,9 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-
-# ดึงค่า API Key จาก Environment Variable
-# วิธีนี้ปลอดภัยกว่าการเขียน Key ลงไปในโค้ดโดยตรง
-# For local development, use your key directly. For production, use the environment variable.
+# Google Maps API Key
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
+
 # For local development, you can create a .env file or set the environment variable manually.
 # Do NOT hardcode your API key here if you plan to push to GitHub.
 # Example for local use (not pushed):
