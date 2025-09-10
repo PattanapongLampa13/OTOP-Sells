@@ -1,0 +1,34 @@
+/* styles.css for OTOP-Sells map and product pages */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px 24px;
+}
+h2 {
+    color: #2e7d32;
+    font-weight: 700;
+}
+.btn-success {
+    background: #43a047;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(67,160,71,0.12);
+    transition: 0.2s;
+}
+.btn-success:hover {
+    background: #388e3c;
+}
+#map {
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+}

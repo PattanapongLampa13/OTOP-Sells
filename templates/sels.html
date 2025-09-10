@@ -1,71 +1,152 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <h1 class="my-4">สินค้าทั้งหมด</h1>
 
-    <!-- Filters and Sorting -->
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <!-- Category Filter -->
-            <div class="btn-group" role="group" aria-label="Category filter">
-                <button type="button" class="btn btn-outline-secondary active">ทุกหมวดหมู่</button>
-                <button type="button" class="btn btn-outline-secondary">อาหารและเครื่องดื่ม</button>
-                <button type="button" class="btn btn-outline-secondary">ของใช้และของตกแต่ง</button>
-                <button type="button" class="btn btn-outline-secondary">เสื้อผ้าและเครื่องแต่งกาย</button>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <!-- Sorting Dropdown -->
-            <div class="input-group">
-                <label class="input-group-text" for="sort-options">จัดเรียงตาม:</label>
-                <select class="form-select" id="sort-options">
-                    <option selected>แนะนำ</option>
-                    <option value="1">ราคา: น้อยไปมาก</option>
-                    <option value="2">ราคา: มากไปน้อย</option>
-                    <option value="3">ชื่อ: ก-ฮ</option>
-                </select>
-            </div>
-        </div>
-    </div>
 
-    <!-- Product Grid -->
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-        {% for i in "12345678" %} <!-- Loop สำหรับแสดงตัวอย่างสินค้า 8 ชิ้น -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="https://via.placeholder.com/300x200?text=Product+{{ forloop.counter }}" class="card-img-top" alt="Product Image">
-                <div class="card-body">
-                    <h5 class="card-title">ชื่อสินค้า {{ forloop.counter }}</h5>
-                    <p class="card-text">คำอธิบายสั้นๆ ของสินค้าชิ้นนี้</p>
-                    <h6 class="card-subtitle mb-2 text-success fw-bold">฿999</h6>
-                </div>
-                <div class="card-footer bg-transparent border-top-0">
-                    <div class="d-grid">
-                        <a href="#" class="btn btn-outline-primary">ดูรายละเอียด</a>
+<!-- Province Selection Modal (Required) -->
+<div class="modal fade" id="provinceModal" tabindex="-1" aria-labelledby="provinceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="provinceModalLabel">กรุณาเลือกจังหวัดของคุณ</h5>
+            </div>
+            <div class="modal-body">
+                <form id="provinceForm" method="get" action="">
+                    <div class="mb-3">
+                        <label for="province-select" class="form-label fw-bold">เลือกจังหวัด:</label>
+                        <select id="province-select" name="province" class="form-select" required>
+                            <option value="" disabled selected>-- กรุณาเลือกจังหวัด --</option>
+                            {% for province in provinces %}
+                                <option value="{{ province }}">{{ province }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="provinceForm" class="btn btn-success">ยืนยัน</button>
             </div>
         </div>
-        {% endfor %}
     </div>
-
-    <!-- Pagination -->
-    <nav aria-label="Page navigation" class="mt-5">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">ก่อนหน้า</a>
-            </li>
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">ถัดไป</a>
-            </li>
-        </ul>
-    </nav>
-
 </div>
+
+<div class="container">
+        <h1 class="my-4">สินค้าทั้งหมด</h1>
+
+
+        {% if selected_province %}
+        <!-- Province Selection Bar -->
+        <div class="row mb-4">
+                <div class="col-12">
+                        <form id="provinceBarForm" method="get" action="" class="d-flex align-items-center gap-2">
+                                <label for="province-bar-select" class="form-label fw-bold mb-0">เลือกจังหวัด:</label>
+                                <select id="province-bar-select" name="province" class="form-select w-auto" onchange="this.form.submit()">
+                                        <option value="">-- ดูสินค้าทุกจังหวัด --</option>
+                                        {% for province in provinces %}
+                                                <option value="{{ province }}" {% if province == selected_province %}selected{% endif %}>{{ province }}</option>
+                                        {% endfor %}
+                                </select>
+                                <button type="button" class="btn btn-outline-secondary" id="clearProvinceBtn">ล้างตัวกรอง</button>
+                        </form>
+                </div>
+        </div>
+        {% endif %}
+
+        {% if selected_province %}
+                {% comment %}Sort products: those with map info first{% endcomment %}
+                {% with products|dictsortreversed:"lat" as sorted_products %}
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                        {% for product in sorted_products %}
+                                <div class="col">
+                                        <div class="card h-100 shadow-sm">
+                                                <img src="{% if product.image_url %}{{ product.image_url }}{% else %}https://via.placeholder.com/300x200?text={{ product.name|urlencode }}{% endif %}" class="card-img-top" alt="{{ product.name }}">
+                                                <div class="card-body">
+                                                        <h5 class="card-title">{{ product.name }}</h5>
+                                                        <p class="card-text text-muted">{{ product.description|truncatewords:10 }}</p>
+                                                        <h6 class="card-subtitle mb-2 text-success fw-bold">{% if product.price %}฿{{ product.price }}{% else %}ไม่ระบุราคา{% endif %}</h6>
+                                                </div>
+                                                <div class="card-footer bg-transparent border-top-0">
+                                                        <div class="d-grid">
+                                                                {% if product.lat and product.long %}
+                                                                        <a href="{% url 'map' %}?name={{ product.name|urlencode }}&lat={{ product.lat }}&long={{ product.long }}" class="btn btn-outline-danger">ดูแผนที่</a>
+                                                                {% else %}
+                                                                        <button class="btn btn-outline-secondary" disabled>ไม่มีข้อมูลแผนที่</button>
+                                                                {% endif %}
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                        {% empty %}
+                                <p class="text-center">ไม่พบสินค้าในจังหวัดนี้</p>
+                        {% endfor %}
+                </div>
+                {% endwith %}
+        {% endif %}
+
+        <!-- Pagination (optional, only if province selected) -->
+        {% if selected_province %}
+        <nav aria-label="Page navigation" class="mt-5">
+                <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">ก่อนหน้า</a>
+                        </li>
+                        <li class="page-item active" aria-current="page">
+                                <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                                <a class="page-link" href="#">ถัดไป</a>
+                        </li>
+                </ul>
+        </nav>
+        {% endif %}
+</div>
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+        // Check localStorage for province
+        var selectedProvince = "{{ selected_province|default:'' }}";
+        var storedProvince = localStorage.getItem('selectedProvince');
+
+        // If no province in URL, but one in localStorage, redirect with it
+        if (!selectedProvince && storedProvince) {
+                var url = new URL(window.location.href);
+                url.searchParams.set('province', storedProvince);
+                window.location.href = url.toString();
+                return;
+        }
+
+        // Show modal if no province selected
+        if (!selectedProvince) {
+                var provinceModal = new bootstrap.Modal(document.getElementById('provinceModal'), {
+                        backdrop: 'static',
+                        keyboard: false
+                });
+                provinceModal.show();
+        }
+
+        // Save province to localStorage on selection
+        var provinceForm = document.getElementById('provinceForm');
+        if (provinceForm) {
+                provinceForm.addEventListener('submit', function(e) {
+                        var select = document.getElementById('province-select');
+                        if (select && select.value) {
+                                localStorage.setItem('selectedProvince', select.value);
+                        }
+                });
+        }
+
+        // Province bar clear button
+        var clearBtn = document.getElementById('clearProvinceBtn');
+        if (clearBtn) {
+                clearBtn.addEventListener('click', function() {
+                        localStorage.removeItem('selectedProvince');
+                        window.location.href = window.location.pathname;
+                });
+        }
+});
+</script>
+{% endblock %}
 {% endblock %}
