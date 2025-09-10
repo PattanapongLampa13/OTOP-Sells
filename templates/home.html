@@ -1,15 +1,17 @@
 {% extends "base.html" %}
+{% comment %} {% load static %} {% endcomment %}
 
 {% block content %}
 <!-- Hero Section -->
 <div class="px-4 py-5 my-5 text-center">
-    <img class="d-block mx-auto mb-4" src="https://via.placeholder.com/150" alt="OTOP Logo" width="150">
+    {% comment %} <img class="d-block mx-auto mb-4" src="{% static 'img/logo.png' %}" alt="OTOP Logo" width="150"> {% endcomment %}
+    {% comment %} <img class="d-block mx-auto mb-4" src="{% static 'img/logo.png' %}" alt="OTOP Logo" width="150"> {% endcomment %}
     <h1 class="display-5 fw-bold">ยินดีต้อนรับสู่ OTOP สินค้าชุมชน</h1>
     <div class="col-lg-6 mx-auto">
         <p class="lead mb-4">ค้นพบและสนับสนุนผลิตภัณฑ์คุณภาพจากภูมิปัญญาท้องถิ่นทั่วประเทศไทย ที่คัดสรรมาเพื่อคุณโดยเฉพาะ</p>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <button type="button" class="btn btn-success btn-lg px-4 gap-3">ดูสินค้าทั้งหมด</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg px-4">เกี่ยวกับเรา</button>
+            <a href="{% url 'sels' %}" class="btn btn-success btn-lg px-4 gap-3" role="button">ดูสินค้าทั้งหมด</a>
+            {% comment %} <button type="button" class="btn btn-outline-secondary btn-lg px-4">เกี่ยวกับเรา</button> {% endcomment %}
         </div>
     </div>
 </div>
@@ -21,7 +23,7 @@
         {% for product in featured_products %}
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    <img src="https://via.placeholder.com/300x200?text={{ product.name|urlencode }}" class="card-img-top" alt="{{ product.name }}">
+                    {% comment %} <img src="https://via.placeholder.com/300x200?text={{ product.name|urlencode }}" class="card-img-top" alt="{{ product.name }}"> {% endcomment %}
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text text-muted">{{ product.address|default_if_none:""|truncatewords:15 }}</p>

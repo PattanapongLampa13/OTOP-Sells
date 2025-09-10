@@ -74,27 +74,36 @@ def register_view(request):
 
 # หน้าแผนที่
 def map_view(request):
+    try:
         # รับ query params สำหรับ lat, long, name
-    all_products = load_otop_data()
-    otop_locations = [
-        p for p in all_products if p.get('lat') is not None and p.get('long') is not None
-    ]
-    locations_data = [
-        {
-            "name": loc.get("name"),
-            "latitude": loc.get("lat"),
-            "longitude": loc.get("long"),
-            "location_name": loc.get("sale_location_name")
-        } for loc in otop_locations
-    ]
-    locations_json = json.dumps(locations_data, ensure_ascii=False)
+        all_products = load_otop_data()
+        otop_locations = [
+            p for p in all_products if p.get('lat') is not None and p.get('long') is not None
+        ]
+        locations_data = [
+            {
+                "name": loc.get("name"),
+                "latitude": loc.get("lat"),
+                "longitude": loc.get("long"),
+                "location_name": loc.get("sale_location_name")
+            } for loc in otop_locations
+        ]
+        locations_json = json.dumps(locations_data, ensure_ascii=False)
 
-    api_key = settings.GOOGLE_MAPS_API_KEY
-    if not api_key:
-        raise ValueError("Google Maps API key is not configured in settings")
+        api_key = settings.GOOGLE_MAPS_API_KEY
+        if not api_key:
+            return render(request, 'map.html', {
+                'error': 'Google Maps API key is not configured. Please check your environment variables.',
+                'debug_info': 'GOOGLE_MAPS_API_KEY is missing in settings'
+            })
 
-    context = {
-        'locations_json': locations_json,
-        'api_key': api_key,
-    }
-    return render(request, 'map.html', context)
+        context = {
+            'locations_json': locations_json,
+            'api_key': api_key,
+        }
+        return render(request, 'map.html', context)
+    except Exception as e:
+        return render(request, 'map.html', {
+            'error': str(e),
+            'debug_info': 'An error occurred while loading the map'
+        })
